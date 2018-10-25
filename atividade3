@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html ng-app="listaAlunos"> 
+    <head>
+        <title>Lista de Alunos</title>
+        <link rel="stylesheet" type="text/css" href="bootstrap.css">
+        <style>
+            .jumbotron {
+                width: 700px;
+                text-align: center;
+                margin-top: auto;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .table {
+                margin-top: 20px;
+            }
+            .form-control{
+                margin-bottom: 5px;
+            }
+            .selecionado{
+                background-color: rgb(100, 152, 219);
+            }
+        </style>
+            
+        <script src="angular.min.js"></script>
+        <script>
+            angular.module("listaAlunos", []);
+            angular.module("listaAlunos").controller("listaAlunosCtrl", function($scope){
+                $scope.app = "Lista de Alunos";
+                $scope.web = "Alunos Web 2018"
+                $scope.alunos = [];
+                $scope.sexos = [
+                    {sexo: "Masculino"},
+                    {sexo: "Feminino"},
+                    {sexo: "Prefiro não informar"}
+                ];
+                $scope.adicionarAluno = function(aluno){
+                    $scope.alunos.push(angular.copy(aluno));
+                    delete $scope.aluno;
+                };
+                $scope.apagarAlunos = function(alunos){
+                    $scope.alunos = alunos.filter(function(aluno){
+                        if(!aluno.selecionado) return aluno;
+                    });
+                };
+                $scope.isAlunoSelecionado = function(alunos){
+                    return alunos.some(function(aluno){
+                        return aluno.selecionado
+                    });
+                }
+                $scope.classe= "selecionado";
+
+            });
+        </script>
+
+    </head>
+    <body ng-controller="listaAlunosCtrl">
+        <div class="jumbotron">
+            <h4>{{app}}</h4>
+            <table class="table"> <!--ng-show e o ng-hide não estavam funcionando e escondiam a tabela mesmo quando ela tinha dados-->
+                <tr>{{web}}</tr>
+                <tr>
+                    <th></th>
+                    <th>Nome</th>
+                    <th>Matrícula</th>
+                    <th>Sexo</th>
+                    <th>Email</th>
+                </tr>
+                <tr ng-class="{selecionado: aluno.selecionado}"ng-repeat="aluno in alunos">
+                    <td><input type="checkbox" ng-model="aluno.selecionado"/></td>
+                    <td>{{aluno.nome}}</td>
+                    <td>{{aluno.matricula}}</td>
+                    <td>{{aluno.sexo.sexo}}</td>
+                    <td>{{aluno.email}}</td>
+                </tr> 
+            </table>
+            <hr/>
+            Nome:<input class="form-control" type="text" ng-model="aluno.nome" placeholder="Digite seu nome..."/><br/>
+            Matrícula:<input class="form-control" type="text" ng-model="aluno.matricula" placeholder="Digite sua matrícula..."/><br/>
+            Sexo:<select class="form-control" ng-model="aluno.sexo" ng-init="aluno.sexo = sexos[0]" ng-options="sexo.sexo for sexo in sexos" /> 
+            </select><br/>
+            Email:<input class="form-control" type="email" ng-model="aluno.email" placeholder="Digite seu email..."/><br/>
+            <button class="btn btn-primary btn-block" ng-click="adicionarAluno(aluno)" ng-disabled="!aluno.nome || !aluno.matricula">Adicionar Aluno</button>
+            <button class="btn btn-danger btn-block" ng-click="apagarAlunos(alunos)" ng-disabled=" !isAlunoSelecionado(alunos)">Apagar Alunos</button>
+
+        </div> 
+    </body>
+</html>
