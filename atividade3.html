@@ -32,11 +32,11 @@
                 $scope.sexos = [
                     {sexo: "Masculino"},
                     {sexo: "Feminino"},
-                    {sexo: "Prefiro não informar"}
                 ];
                 $scope.adicionarAluno = function(aluno){
                     $scope.alunos.push(angular.copy(aluno));
                     delete $scope.aluno;
+                    $scope.alunoForm.$setPristine();
                 };
                 $scope.apagarAlunos = function(alunos){
                     $scope.alunos = alunos.filter(function(aluno){
@@ -75,12 +75,20 @@
                 </tr> 
             </table>
             <hr/>
-            Nome:<input class="form-control" type="text" ng-model="aluno.nome" placeholder="Digite seu nome..."/><br/>
-            Matrícula:<input class="form-control" type="text" ng-model="aluno.matricula" placeholder="Digite sua matrícula..."/><br/>
-            Sexo:<select class="form-control" ng-model="aluno.sexo" ng-init="aluno.sexo = sexos[0]" ng-options="sexo.sexo for sexo in sexos" /> 
-            </select><br/>
-            Email:<input class="form-control" type="email" ng-model="aluno.email" placeholder="Digite seu email..."/><br/>
-            <button class="btn btn-primary btn-block" ng-click="adicionarAluno(aluno)" ng-disabled="!aluno.nome || !aluno.matricula">Adicionar Aluno</button>
+            <form name="alunoForm">
+                    Nome:<input class="form-control" type="text" ng-model="aluno.nome" name="nome" placeholder="Digite seu nome..." ng-required="true" ng-minlength="15"/><br/>
+                    Matrícula:<input class="form-control" type="text" ng-model="aluno.matricula" name="matricula" placeholder="Digite sua matrícula..." ng-required="true" ng-minlength="10" ng-maxlength="11" ng-pattern="/^\d{10,11}$/"/><br/>
+                    Sexo:<select class="form-control" ng-model="aluno.sexo" ng-init="aluno.sexo = sexos[0]" ng-options="sexo.sexo for sexo in sexos"> 
+                    </select><br/>
+                    Email:<input class="form-control" type="text" ng-model="aluno.email" name="email" placeholder="Digite seu email..." ng-required="true" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"/><br/>
+            </form>
+            <div ng-show="alunoForm.nome.$error.required && alunoForm.nome.$dirty" class="alert alert-danger">O campo nome deve ser preenchido!</div>
+            <div ng-show="alunoForm.matricula.$error.required && alunoForm.matricula.$dirty" class="alert alert-danger">O campo matrícula deve ser preenchido!</div>
+            <div ng-show="alunoForm.email.$error.required && alunoForm.email.$dirty" class="alert alert-danger">O campo email deve ser preenchido!</div>
+            <div ng-show="alunoForm.nome.$error.minlength" class="alert alert-danger">O nome do novo aluno está muito pequeno!</div>
+            <div ng-show="alunoForm.matricula.$error.pattern" class="alert alert-danger">A matrícula do novo aluno está inválida!</div>
+            <div ng-show="alunoForm.email.$error.pattern" class="alert alert-danger">O email do novo aluno está inválido!</div>
+            <button class="btn btn-primary btn-block" ng-click="adicionarAluno(aluno)" ng-disabled="alunoForm.$invalid">Adicionar Aluno</button>
             <button class="btn btn-danger btn-block" ng-click="apagarAlunos(alunos)" ng-disabled=" !isAlunoSelecionado(alunos)">Apagar Alunos</button>
 
         </div> 
