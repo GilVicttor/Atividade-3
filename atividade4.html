@@ -60,7 +60,7 @@
         <div class="jumbotron">
             <h4>{{app}}</h4>
             <input class="form-control" type="text" ng-model="criterioBusca" placeholder="Digite sua busca..."/>  
-            <table class="table"> <!--ng-show e o ng-hide não estavam funcionando e escondiam a tabela mesmo quando ela tinha dados-->
+            <table class="table" ng-show="alunos.length > 0"> 
                 <tr>{{web}}</tr>
                 <tr>
                     <th></th>
