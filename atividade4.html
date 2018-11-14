@@ -49,7 +49,9 @@
                     });
                 }
                 $scope.classe= "selecionado";
-
+                $scope.ordenarPor = function(campo) {
+                    $scope.criterioDeOrdenacao = campo;
+                }
             });
         </script>
 
@@ -57,21 +59,26 @@
     <body ng-controller="listaAlunosCtrl">
         <div class="jumbotron">
             <h4>{{app}}</h4>
+            <input class="form-control" type="text" ng-model="criterioBusca" placeholder="Digite sua busca..."/>  
             <table class="table"> <!--ng-show e o ng-hide não estavam funcionando e escondiam a tabela mesmo quando ela tinha dados-->
                 <tr>{{web}}</tr>
                 <tr>
                     <th></th>
-                    <th>Nome</th>
-                    <th>Matrícula</th>
-                    <th>Sexo</th>
-                    <th>Email</th>
+                    <th><a href="" ng-click="ordenarPor('nome')">Nome</a></th>
+                    <th><a href="" ng-click="ordenarPor('matricula')">Matrícula</a></th>
+                    <th><a href="" ng-click="ordenarPor('nome')">Sexo</a></th>
+                    <th><a href="" ng-click="ordenarPor('email')">Email</a></th>
+                    <th><a href="" ng-click="ordenarPor('d_nasc')">Data de Nascimento</a></th>
+                    <th><a href="" ng-click="ordenarPor('preco_mat')">Preço da Matrícula</a></th>
                 </tr>
-                <tr ng-class="{selecionado: aluno.selecionado}"ng-repeat="aluno in alunos">
+                <tr ng-class="{selecionado: aluno.selecionado}" ng-repeat="aluno in alunos | filter:criterioBusca | orderBy:criterioDeOrdenacao:false "/>
                     <td><input type="checkbox" ng-model="aluno.selecionado"/></td>
                     <td>{{aluno.nome}}</td>
                     <td>{{aluno.matricula}}</td>
                     <td>{{aluno.sexo.sexo}}</td>
                     <td>{{aluno.email}}</td>
+                    <td>{{aluno.d_nasc | date:'dd/mm/yyyy'}}</td>
+                    <td>{{aluno.preco_mat}}</td>
                 </tr> 
             </table>
             <hr/>
@@ -81,13 +88,19 @@
                     Sexo:<select class="form-control" ng-model="aluno.sexo" ng-init="aluno.sexo = sexos[0]" ng-options="sexo.sexo for sexo in sexos"> 
                     </select><br/>
                     Email:<input class="form-control" type="text" ng-model="aluno.email" name="email" placeholder="Digite seu email..." ng-required="true" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"/><br/>
+                    Data de Nascimento:<input class="form-control" type="date" ng-model="aluno.d_nasc" name="d_nasc" placeholder="Digite sua data de nascimento..." ng-required="true"/><br/>
+                    Preço da Matrícula:<input class="form-control" type="text" ng-model="aluno.preco_mat" name="preco_mat" placeholder="Digite o preço da matrícula..." ng-required="true"/><br/>
             </form>
             <div ng-show="alunoForm.nome.$error.required && alunoForm.nome.$dirty" class="alert alert-danger">O campo nome deve ser preenchido!</div>
             <div ng-show="alunoForm.matricula.$error.required && alunoForm.matricula.$dirty" class="alert alert-danger">O campo matrícula deve ser preenchido!</div>
             <div ng-show="alunoForm.email.$error.required && alunoForm.email.$dirty" class="alert alert-danger">O campo email deve ser preenchido!</div>
+            <div ng-show="alunoForm.d_nasc.$error.required && alunoForm.d_nasc.$dirty" class="alert alert-danger">O campo data de nascimento deve ser preenchido!</div>
+            <div ng-show="alunoForm.preco_mat.$error.required && alunoForm.preco_mat.$dirty" class="alert alert-danger">O campo preço da matrícula deve ser preenchido!</div>
             <div ng-show="alunoForm.nome.$error.minlength" class="alert alert-danger">O nome do novo aluno está muito pequeno!</div>
             <div ng-show="alunoForm.matricula.$error.pattern" class="alert alert-danger">A matrícula do novo aluno está inválida!</div>
             <div ng-show="alunoForm.email.$error.pattern" class="alert alert-danger">O email do novo aluno está inválido!</div>
+            <div ng-show="alunoForm.d_nasc.$error.pattern" class="alert alert-danger">A data de nascimento do novo aluno está inválida!</div>
+            <div ng-show="alunoForm.preco_mat.$error.pattern" class="alert alert-danger">O preço da matrícula do novo aluno está inválido!</div>
             <button class="btn btn-primary btn-block" ng-click="adicionarAluno(aluno)" ng-disabled="alunoForm.$invalid">Adicionar Aluno</button>
             <button class="btn btn-danger btn-block" ng-click="apagarAlunos(alunos)" ng-disabled=" !isAlunoSelecionado(alunos)">Apagar Alunos</button>
 
