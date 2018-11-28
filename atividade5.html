@@ -88,7 +88,7 @@
                     Sexo:<select class="form-control" ng-model="aluno.sexo" ng-init="aluno.sexo = sexos[0]" ng-options="sexo.sexo for sexo in sexos"> 
                     </select><br/>
                     Email:<input class="form-control" type="text" ng-model="aluno.email" name="email" placeholder="Digite seu email..." ng-required="true" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"/><br/>
-                    Data de Nascimento:<input class="form-control" type="date" ng-model="aluno.d_nasc" name="d_nasc" placeholder="Digite sua data de nascimento..." ng-required="true"/><br/>
+                    Data de Nascimento:<input class="form-control" type="date" ng-model="aluno.d_nasc" name="d_nasc" ng-required="true"/><br/>
                     Preço da Matrícula:<input class="form-control" type="text" ng-model="aluno.preco_mat" name="preco_mat" placeholder="Digite o preço da matrícula..." ng-required="true"/><br/>
             </form>
             <div ng-show="alunoForm.nome.$error.required && alunoForm.nome.$dirty" class="alert alert-danger">O campo nome deve ser preenchido!</div>
